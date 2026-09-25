@@ -45,7 +45,7 @@ export default function StatusPage({
         actions={
           <button
             onClick={() => exportToExcel(invoices, exportName)}
-            className="btn-ghost"
+            className="btn-ghost min-h-11 justify-center w-full sm:w-auto"
             disabled={invoices.length === 0}
           >
             <IconDownload className="h-4 w-4" />

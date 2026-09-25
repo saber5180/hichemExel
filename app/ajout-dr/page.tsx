@@ -138,7 +138,7 @@ export default function AjoutDRPage() {
       />
 
       {/* Recherche */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <label className="label">Numéro de facture</label>
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
@@ -152,7 +152,7 @@ export default function AjoutDRPage() {
               className="input num !pl-10 uppercase"
             />
           </div>
-          <button onClick={handleSearch} className="btn-primary sm:w-36">
+          <button onClick={handleSearch} className="btn-primary min-h-11 sm:w-36">
             <IconSearch className="h-4 w-4" />
             Chercher
           </button>

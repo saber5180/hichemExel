@@ -59,7 +59,7 @@ export default function Sheet1Page() {
           <>
             <button
               onClick={() => router.push('/ajout-dr')}
-              className="btn-ghost"
+              className="btn-ghost min-h-11 justify-center"
               disabled={invoices.length === 0}
             >
               <IconPlus className="h-4 w-4" />
@@ -67,7 +67,7 @@ export default function Sheet1Page() {
             </button>
             <button
               onClick={handleSynchronize}
-              className="btn-primary"
+              className="btn-primary min-h-11 justify-center"
               disabled={invoices.length === 0}
             >
               <IconSync className="h-4 w-4" />
@@ -156,7 +156,49 @@ export default function Sheet1Page() {
                 description="Aucune facture ne correspond à ces filtres."
               />
             ) : (
-              <div className="table-wrap">
+              <>
+              <div className="divide-y divide-slate-100 md:hidden">
+                {filtered.map((invoice) => (
+                  <div key={invoice.id} className="space-y-3 p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="num truncate font-semibold text-slate-900">{invoice.numFacture}</p>
+                        <p className="truncate font-medium text-slate-800">{invoice.nomClient}</p>
+                        <p className="text-xs text-slate-400">{invoice.client}</p>
+                      </div>
+                      <span className={getRetardBadge(invoice.retardPaiement)}>
+                        {invoice.retardPaiement} j
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <p className="label !mb-0.5">Montant</p>
+                        <p className="num text-slate-600">{formatMoney(invoice.montantFact)}</p>
+                      </div>
+                      <div>
+                        <p className="label !mb-0.5">Réglé</p>
+                        <p className="num text-slate-600">{formatMoney(invoice.montantReg)}</p>
+                      </div>
+                      <div>
+                        <p className="label !mb-0.5">Solde</p>
+                        <p className="num font-bold text-slate-900">{formatMoney(invoice.solde)}</p>
+                      </div>
+                      <div>
+                        <p className="label !mb-0.5">Émission</p>
+                        <p className="text-slate-600">{formatDate(invoice.dateEmission)}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => deleteInvoice(invoice.id)}
+                      className="btn-ghost min-h-11 w-full"
+                    >
+                      <IconTrash className="h-4 w-4" />
+                      Supprimer
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="table-wrap hidden md:block">
                 <table className="data-table">
                   <thead>
                     <tr>
@@ -211,6 +253,7 @@ export default function Sheet1Page() {
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </div>
 

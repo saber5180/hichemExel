@@ -11,8 +11,12 @@
     @apply border-slate-200;
   }
 
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    @apply bg-slate-50 text-slate-800 antialiased;
+    @apply overflow-x-hidden bg-slate-50 text-slate-800 antialiased;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
@@ -42,7 +46,7 @@
   }
 
   .card-header {
-    @apply flex items-center justify-between gap-4 border-b border-slate-100 px-6 py-5;
+    @apply flex flex-col items-start justify-between gap-2 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-5;
   }
 
   .card-title {
@@ -92,9 +96,10 @@
   }
 
   .input {
-    @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900
+    @apply min-h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-base text-slate-900
            shadow-sm transition-all placeholder:text-slate-400
-           focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10;
+           focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10
+           sm:min-h-0 sm:text-sm;
   }
 
   .select {

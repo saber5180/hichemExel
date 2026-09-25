@@ -1,12 +1,17 @@
 import './globals.css';
-import type { Metadata } from 'next';
-import Sidebar from '@/components/Sidebar';
-import Topbar from '@/components/Topbar';
-import MobileNav from '@/components/MobileNav';
+import type { Metadata, Viewport } from 'next';
+import AppChrome from '@/components/AppChrome';
 
 export const metadata: Metadata = {
   title: 'Recouvrement — Gestion des factures',
   description: 'Système de gestion et de recouvrement de factures',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#4f46e5',
 };
 
 export default function RootLayout({
@@ -25,15 +30,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans">
-        <Sidebar />
-
-        <div className="lg:pl-[17rem]">
-          <Topbar />
-          <MobileNav />
-          <main className="mx-auto w-full max-w-[1400px] px-5 py-7 lg:px-8 lg:py-9">
-            <div className="animate-fade-in-up">{children}</div>
-          </main>
-        </div>
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   );

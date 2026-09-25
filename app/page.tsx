@@ -46,11 +46,11 @@ export default function HomePage() {
         icon={<IconDashboard className="h-5 w-5" />}
         actions={
           <>
-            <Link href="/upload" className="btn-ghost">
+            <Link href="/upload" className="btn-ghost min-h-11 justify-center">
               <IconUpload className="h-4 w-4" />
               Importer Excel
             </Link>
-            <Link href="/ajout-dr" className="btn-primary">
+            <Link href="/ajout-dr" className="btn-primary min-h-11 justify-center">
               <IconPlus className="h-4 w-4" />
               Ajout DR
             </Link>
@@ -213,7 +213,28 @@ export default function HomePage() {
             </Link>
           </EmptyState>
         ) : (
-          <div className="table-wrap">
+          <>
+          <div className="divide-y divide-slate-100 md:hidden">
+            {recent.map((invoice) => (
+              <div key={invoice.id} className="flex items-start justify-between gap-3 p-4">
+                <div className="min-w-0">
+                  <p className="num truncate font-semibold text-slate-900">{invoice.numFacture}</p>
+                  <p className="truncate text-sm font-medium text-slate-800">{invoice.nomClient}</p>
+                  <p className="mt-1 num text-sm font-bold text-slate-900">
+                    {formatMoney(invoice.solde)}
+                    <span className="ml-1 text-[11px] font-medium text-slate-400">TND</span>
+                  </p>
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-1.5">
+                  <span className={getRetardBadge(invoice.retardPaiement)}>
+                    {invoice.retardPaiement} j
+                  </span>
+                  <span className="badge-slate">{getStatusLabel(invoice.status)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="table-wrap hidden md:block">
             <table className="data-table">
               <thead>
                 <tr>
@@ -253,6 +274,7 @@ export default function HomePage() {
               </tbody>
             </table>
           </div>
+          </>
         )}
       </div>
     </>

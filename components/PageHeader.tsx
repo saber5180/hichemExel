@@ -27,7 +27,7 @@ export default function PageHeader({
   actions,
 }: PageHeaderProps) {
   return (
-    <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mb-5 flex flex-col gap-4 sm:mb-7 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3.5">
         {icon && (
           <div
@@ -37,14 +37,18 @@ export default function PageHeader({
           </div>
         )}
         <div className="min-w-0">
-          <h1 className="text-[22px] font-bold leading-tight tracking-tight text-slate-900">
+          <h1 className="text-[20px] font-bold leading-tight tracking-tight text-slate-900 sm:text-[22px]">
             {title}
           </h1>
           {subtitle && <p className="mt-0.5 text-sm text-slate-500">{subtitle}</p>}
         </div>
       </div>
 
-      {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
+      {actions && (
+        <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+          {actions}
+        </div>
+      )}
     </div>
   );
 }

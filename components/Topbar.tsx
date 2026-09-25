@@ -2,25 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IconPlus, IconUpload } from './Icons';
+import { PAGE_TITLES } from '@/lib/nav';
+import { IconMenu, IconPlus, IconUpload } from './Icons';
 
-const titles: Record<string, string> = {
-  '/': 'Tableau de bord',
-  '/upload': 'Importer Excel',
-  '/ajout-dr': 'Ajout DR',
-  '/sheet1': 'Sheet1',
-  '/tableau-attente': "Tableau d'attente",
-  '/alerte': 'Alerte',
-  '/tike-resteaux': 'Tike Resteaux',
-  '/derogation': 'Dérogation Comercial',
-  '/avoir': 'Avoir',
-  '/fautte-chauffeur': 'Fautte Chauffeur',
-  '/annomali': 'Annomali',
-};
-
-export default function Topbar() {
+export default function Topbar({ onOpenMenu }: { onOpenMenu: () => void }) {
   const pathname = usePathname();
-  const title = titles[pathname] ?? 'Recouvrement';
+  const title = PAGE_TITLES[pathname] ?? 'Recouvrement';
 
   const today = new Intl.DateTimeFormat('fr-FR', {
     weekday: 'long',
@@ -30,25 +17,36 @@ export default function Topbar() {
   }).format(new Date());
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white/80 px-5 backdrop-blur-md lg:px-8">
-      <div className="flex min-w-0 items-center gap-2 text-sm">
-        <span className="hidden text-slate-400 sm:inline">Recouvrement</span>
-        <span className="hidden text-slate-300 sm:inline">/</span>
-        <span className="truncate font-semibold text-slate-900">{title}</span>
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-3 border-b border-slate-200 bg-white/90 px-3 pt-[env(safe-area-inset-top)] backdrop-blur-md sm:h-16 sm:px-5 lg:px-8">
+      <div className="flex min-w-0 items-center gap-2">
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 lg:hidden"
+          aria-label="Ouvrir le menu"
+        >
+          <IconMenu className="h-5 w-5" />
+        </button>
+
+        <div className="min-w-0 text-sm">
+          <span className="hidden text-slate-400 sm:inline">Recouvrement</span>
+          <span className="hidden text-slate-300 sm:inline"> / </span>
+          <span className="block truncate font-semibold text-slate-900">{title}</span>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
         <span className="hidden items-center gap-2 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-500 ring-1 ring-slate-200 md:inline-flex">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           {today}
         </span>
 
-        <Link href="/upload" className="btn-ghost btn-sm">
+        <Link href="/upload" className="btn-ghost h-11 w-11 !p-0 sm:h-auto sm:w-auto sm:px-3 sm:py-1.5">
           <IconUpload className="h-4 w-4" />
           <span className="hidden sm:inline">Importer</span>
         </Link>
 
-        <Link href="/ajout-dr" className="btn-primary btn-sm">
+        <Link href="/ajout-dr" className="btn-primary h-11 w-11 !p-0 sm:h-auto sm:w-auto sm:px-3 sm:py-1.5">
           <IconPlus className="h-4 w-4" />
           <span className="hidden sm:inline">Ajout DR</span>
         </Link>

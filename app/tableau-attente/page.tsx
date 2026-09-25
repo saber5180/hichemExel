@@ -5,6 +5,7 @@ import { Invoice } from '@/types/invoice';
 import { formatDate, formatMoney, getRetardBadge, isDateExpired } from '@/lib/utils';
 import PageHeader from '@/components/PageHeader';
 import EmptyState from '@/components/EmptyState';
+import InvoiceCard from '@/components/InvoiceCard';
 import { IconClock, IconPlus, IconSend, IconTrash } from '@/components/Icons';
 
 const DESTINATIONS: Record<string, Invoice['status']> = {
@@ -76,7 +77,47 @@ export default function TableauAttentePage() {
               </p>
             </div>
 
-            <div className="table-wrap">
+            <div className="divide-y divide-slate-100 md:hidden">
+              {invoices.map((invoice) => (
+                <InvoiceCard
+                  key={invoice.id}
+                  invoice={invoice}
+                  extra={
+                    <div className="flex flex-wrap gap-2">
+                      {invoice.natureDerogation ? (
+                        <span className="badge-indigo">{invoice.natureDerogation}</span>
+                      ) : (
+                        <span className="badge-amber">Non définie</span>
+                      )}
+                      {invoice.delaiDerogation ? (
+                        <span className="badge-slate">Délai {invoice.delaiDerogation} j</span>
+                      ) : null}
+                    </div>
+                  }
+                  footer={
+                    <>
+                      <button
+                        onClick={() => handleTransfer(invoice)}
+                        disabled={!invoice.natureDerogation}
+                        className="btn-success min-h-11 flex-1"
+                      >
+                        <IconSend className="h-4 w-4" />
+                        Transférer
+                      </button>
+                      <button
+                        onClick={() => deleteInvoice(invoice.id)}
+                        className="btn-ghost min-h-11"
+                      >
+                        <IconTrash className="h-4 w-4" />
+                        Supprimer
+                      </button>
+                    </>
+                  }
+                />
+              ))}
+            </div>
+
+            <div className="table-wrap hidden md:block">
               <table className="data-table">
                 <thead>
                   <tr>
