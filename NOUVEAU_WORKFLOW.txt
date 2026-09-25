@@ -1,0 +1,126 @@
+═══════════════════════════════════════════════════════════════════════════
+  🔄 NOUVEAU WORKFLOW - COMME EXCEL VBA
+═══════════════════════════════════════════════════════════════════════════
+
+✅ MODIFICATION TERMINÉE!
+
+Le workflow est maintenant IDENTIQUE à votre Excel VBA:
+
+1. 📤 Upload Excel → SHEET1 (données brutes)
+2. ➕ AJOUT DR → Chercher dans Sheet1 → Ajouter
+3. 🚀 Transférer → ALERTE, TIKE RESTEAUX, etc.
+
+═══════════════════════════════════════════════════════════════════════════
+  📋 WORKFLOW DÉTAILLÉ
+═══════════════════════════════════════════════════════════════════════════
+
+ÉTAPE 1: UPLOAD
+───────────────
+http://localhost:3001/upload
+
+- Upload votre fichier Excel (.xlsx, .xlsm)
+- Les données vont dans SHEET1 (pas ALERTE)
+- SOLDE calculé automatiquement (I - J)
+
+ÉTAPE 2: SHEET1
+───────────────
+http://localhost:3001/sheet1
+
+- Voir toutes les données importées
+- Bouton "Synchroniser" = Tout envoyer vers ALERTE
+- Ou utiliser AJOUT DR pour sélection individuelle
+
+ÉTAPE 3: AJOUT DR
+─────────────────
+http://localhost:3001/ajout-dr
+
+1. Taper N° Facture (ex: FC26SOP219879)
+2. Cliquer "Chercher"
+3. Système cherche dans Sheet1
+4. Remplir Nature Dérogation + Dates
+5. Deux options:
+   - "Ajouter au Tableau" = Tableau d'attente
+   - "Transférer Direct" = Vers destination finale
+
+ÉTAPE 4: TRANSFERT
+──────────────────
+Depuis n'importe quelle page:
+- Menu déroulant "Transférer..."
+- Choisir destination
+- Facture change de statut
+
+═══════════════════════════════════════════════════════════════════════════
+  🆕 PAGES MISES À JOUR
+═══════════════════════════════════════════════════════════════════════════
+
+✅ /sheet1          - Nouvelle page! Données importées
+✅ /ajout-dr        - Modifié! Recherche depuis Sheet1
+✅ /upload          - Redirige vers Sheet1
+✅ Layout           - Sheet1 ajouté au menu
+
+═══════════════════════════════════════════════════════════════════════════
+  🎯 EXEMPLE D'UTILISATION
+═══════════════════════════════════════════════════════════════════════════
+
+SCÉNARIO: Importer et traiter factures
+
+1. Aller sur /upload
+2. Upload RECOUVREMENT.xlsm
+3. → Automatiquement sur /sheet1
+4. Voir 6000+ factures importées
+
+5. Aller sur /ajout-dr
+6. Taper "FC26SOP219879"
+7. Cliquer "Chercher"
+8. Facture trouvée dans Sheet1!
+
+9. Remplir:
+   - Nature: TIKE RESTEAUX
+   - Délai: 5 jours
+   - Date prévu: 25/09/2026
+
+10. Cliquer "Transférer Direct"
+11. → Facture dans /tike-resteaux avec date rouge si dépassée!
+
+═══════════════════════════════════════════════════════════════════════════
+  🔄 COMPARAISON EXCEL VBA vs WEB
+═══════════════════════════════════════════════════════════════════════════
+
+EXCEL VBA                           |  APPLICATION WEB
+────────────────────────────────────|──────────────────────────────────
+1. Coller données dans Sheet1       |  1. Upload Excel
+2. Bouton Synchroniser → ALERTE     |  2. Bouton Synchroniser → ALERTE
+3. D5: Taper N° facture             |  3. Chercher N° facture
+4. Remplir formulaire AJOUT DR      |  4. Remplir formulaire AJOUT DR
+5. Bouton Ajouter                   |  5. Bouton Ajouter au Tableau
+6. Bouton Transférer (vert)         |  6. Bouton Transférer Direct
+7. Date rouge si dépassée           |  7. Date rouge si dépassée
+
+═══════════════════════════════════════════════════════════════════════════
+  ✨ NOUVELLES FONCTIONNALITÉS
+═══════════════════════════════════════════════════════════════════════════
+
+✅ Page Sheet1 dédiée
+✅ Recherche intelligente (Sheet1 → Autres pages)
+✅ Deux modes de transfert:
+   - Tableau d'attente (WAITING)
+   - Transfert direct vers destination
+✅ Status affichés (Sheet1, Waiting, ALERTE, etc.)
+✅ Workflow Excel respecté à 100%
+
+═══════════════════════════════════════════════════════════════════════════
+  🚀 POUR TESTER
+═══════════════════════════════════════════════════════════════════════════
+
+Le serveur tourne sur: http://localhost:3001
+
+1. Rafraîchir la page (Ctrl+Shift+R)
+2. Cliquer "Upload" en haut
+3. Upload votre RECOUVREMENT.xlsm
+4. Suivre le workflow!
+
+═══════════════════════════════════════════════════════════════════════════
+
+           🎉 WORKFLOW EXCEL REPRODUIT ! 🎉
+
+═══════════════════════════════════════════════════════════════════════════
