@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInvoiceStore } from '@/lib/store';
-import { formatDate, formatMoney, getRetardBadge } from '@/lib/utils';
+import { calculateRetard, formatDate, formatMoney, fromInputDate, getRetardBadge, toInputDate } from '@/lib/utils';
 import PageHeader from '@/components/PageHeader';
 import EmptyState from '@/components/EmptyState';
 import {
@@ -20,6 +20,16 @@ export default function Sheet1Page() {
   const router = useRouter();
   const invoices = useInvoiceStore((state) => state.getInvoicesByStatus('SHEET1'));
   const deleteInvoice = useInvoiceStore((state) => state.deleteInvoice);
+  const updateInvoice = useInvoiceStore((state) => state.updateInvoice);
+
+  const handleDateEmissionChange = (id: string, value: string) => {
+    if (!value) return;
+    const dateEmission = fromInputDate(value);
+    updateInvoice(id, {
+      dateEmission,
+      retardPaiement: calculateRetard(dateEmission),
+    });
+  };
 
   const [dateFilter, setDateFilter] = useState('');
   const [search, setSearch] = useState('');
@@ -184,8 +194,13 @@ export default function Sheet1Page() {
                         <p className="num font-bold text-slate-900">{formatMoney(invoice.solde)}</p>
                       </div>
                       <div>
-                        <p className="label !mb-0.5">Émission</p>
-                        <p className="text-slate-600">{formatDate(invoice.dateEmission)}</p>
+                        <p className="label !mb-0.5">Date émission</p>
+                        <input
+                          type="date"
+                          value={toInputDate(invoice.dateEmission)}
+                          onChange={(e) => handleDateEmissionChange(invoice.id, e.target.value)}
+                          className="input !min-h-10 !py-1.5 !text-sm"
+                        />
                       </div>
                     </div>
                     <button
@@ -236,8 +251,13 @@ export default function Sheet1Page() {
                             {invoice.retardPaiement} j
                           </span>
                         </td>
-                        <td className="text-center text-slate-500">
-                          {formatDate(invoice.dateEmission)}
+                        <td className="text-center">
+                          <input
+                            type="date"
+                            value={toInputDate(invoice.dateEmission)}
+                            onChange={(e) => handleDateEmissionChange(invoice.id, e.target.value)}
+                            className="input !min-h-9 !w-[10.5rem] !px-2 !py-1 !text-xs"
+                          />
                         </td>
                         <td className="text-right">
                           <button

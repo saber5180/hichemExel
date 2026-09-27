@@ -25,7 +25,23 @@ export function calculateRetard(dateEmission: Date): number {
 // Formater la date
 export function formatDate(date: Date | undefined): string {
   if (!date) return '';
-  return new Intl.DateTimeFormat('fr-FR').format(date);
+  return new Intl.DateTimeFormat('fr-FR').format(new Date(date));
+}
+
+// Date pour un input type="date" (YYYY-MM-DD, fuseau local)
+export function toInputDate(date: Date | undefined): string {
+  if (!date) return '';
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return '';
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+export function fromInputDate(value: string): Date {
+  const [y, m, d] = value.split('-').map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
 }
 
 // Formater un montant en dinars

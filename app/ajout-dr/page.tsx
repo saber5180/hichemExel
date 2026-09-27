@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useInvoiceStore } from '@/lib/store';
 import { Invoice } from '@/types/invoice';
-import { formatDate, formatMoney, getRetardBadge, getStatusLabel } from '@/lib/utils';
+import { calculateRetard, formatMoney, fromInputDate, getRetardBadge, getStatusLabel, toInputDate } from '@/lib/utils';
 import PageHeader from '@/components/PageHeader';
 import {
   IconAlert,
@@ -34,10 +34,19 @@ export default function AjoutDRPage() {
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [formData, setFormData] = useState({
+    dateEmission: '',
     natureDerogation: '',
     delaiDerogation: '',
     dateRegPrevu: '',
   });
+
+  const computeDatePrevu = (dateEmissionValue: string, delaiValue: string) => {
+    const delai = parseInt(delaiValue, 10);
+    if (!dateEmissionValue || isNaN(delai) || delai <= 0) return '';
+    const datePrevu = fromInputDate(dateEmissionValue);
+    datePrevu.setDate(datePrevu.getDate() + delai);
+    return toInputDate(datePrevu);
+  };
 
   const handleSearch = () => {
     const query = searchNum.trim().toUpperCase();
@@ -62,39 +71,45 @@ export default function AjoutDRPage() {
     setSelectedInvoice(found);
     setFeedback(null);
     setFormData({
+      dateEmission: toInputDate(found.dateEmission),
       natureDerogation: found.natureDerogation ?? '',
       delaiDerogation: found.delaiDerogation?.toString() ?? '',
-      dateRegPrevu: found.dateRegPrevu
-        ? new Date(found.dateRegPrevu).toISOString().split('T')[0]
-        : '',
+      dateRegPrevu: found.dateRegPrevu ? toInputDate(found.dateRegPrevu) : '',
     });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    // Date règlement prévu = date émission + délai de dérogation
-    if (name === 'delaiDerogation' && selectedInvoice) {
-      const delai = parseInt(value, 10);
-      if (!isNaN(delai) && delai > 0) {
-        const datePrevu = new Date(selectedInvoice.dateEmission);
-        datePrevu.setDate(datePrevu.getDate() + delai);
-        setFormData((prev) => ({
-          ...prev,
-          delaiDerogation: value,
-          dateRegPrevu: datePrevu.toISOString().split('T')[0],
-        }));
-        return;
-      }
-    }
+    setFormData((prev) => {
+      const next = { ...prev, [name]: value };
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+      if (name === 'dateEmission' && value) {
+        next.dateRegPrevu = computeDatePrevu(value, prev.delaiDerogation) || prev.dateRegPrevu;
+      }
+
+      if (name === 'delaiDerogation') {
+        const dateEmission = next.dateEmission || toInputDate(selectedInvoice?.dateEmission);
+        next.dateRegPrevu = computeDatePrevu(dateEmission, value) || next.dateRegPrevu;
+      }
+
+      return next;
+    });
+
+    if (name === 'dateEmission' && selectedInvoice && value) {
+      const dateEmission = fromInputDate(value);
+      setSelectedInvoice({
+        ...selectedInvoice,
+        dateEmission,
+        retardPaiement: calculateRetard(dateEmission),
+      });
+    }
   };
 
   const handleClear = () => {
     setSearchNum('');
     setSelectedInvoice(null);
-    setFormData({ natureDerogation: '', delaiDerogation: '', dateRegPrevu: '' });
+    setFormData({ dateEmission: '', natureDerogation: '', delaiDerogation: '', dateRegPrevu: '' });
   };
 
   const handleAddToWaiting = () => {
@@ -105,10 +120,16 @@ export default function AjoutDRPage() {
       return;
     }
 
+    const dateEmission = formData.dateEmission
+      ? fromInputDate(formData.dateEmission)
+      : selectedInvoice.dateEmission;
+
     updateInvoice(selectedInvoice.id, {
+      dateEmission,
+      retardPaiement: calculateRetard(dateEmission),
       natureDerogation: formData.natureDerogation,
       delaiDerogation: parseInt(formData.delaiDerogation, 10) || undefined,
-      dateRegPrevu: formData.dateRegPrevu ? new Date(formData.dateRegPrevu) : undefined,
+      dateRegPrevu: formData.dateRegPrevu ? fromInputDate(formData.dateRegPrevu) : undefined,
       status: 'WAITING',
     });
 
@@ -118,7 +139,7 @@ export default function AjoutDRPage() {
     });
     setSearchNum('');
     setSelectedInvoice(null);
-    setFormData({ natureDerogation: '', delaiDerogation: '', dateRegPrevu: '' });
+    setFormData({ dateEmission: '', natureDerogation: '', delaiDerogation: '', dateRegPrevu: '' });
   };
 
   const sheet1Count = invoices.filter((i) => i.status === 'SHEET1').length;
@@ -230,7 +251,15 @@ export default function AjoutDRPage() {
             </div>
             <div>
               <dt className="label !mb-1">Date émission</dt>
-              <dd className="text-slate-700">{formatDate(selectedInvoice.dateEmission)}</dd>
+              <dd>
+                <input
+                  type="date"
+                  name="dateEmission"
+                  value={formData.dateEmission}
+                  onChange={handleChange}
+                  className="input"
+                />
+              </dd>
             </div>
           </dl>
 

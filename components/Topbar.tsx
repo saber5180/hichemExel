@@ -1,9 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PAGE_TITLES } from '@/lib/nav';
-import { IconMenu, IconPlus, IconUpload } from './Icons';
+import { IconMenu } from './Icons';
 
 export default function Topbar({ onOpenMenu }: { onOpenMenu: () => void }) {
   const pathname = usePathname();
@@ -35,22 +34,10 @@ export default function Topbar({ onOpenMenu }: { onOpenMenu: () => void }) {
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-        <span className="hidden items-center gap-2 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-500 ring-1 ring-slate-200 md:inline-flex">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          {today}
-        </span>
-
-        <Link href="/upload" className="btn-ghost h-11 w-11 !p-0 sm:h-auto sm:w-auto sm:px-3 sm:py-1.5">
-          <IconUpload className="h-4 w-4" />
-          <span className="hidden sm:inline">Importer</span>
-        </Link>
-
-        <Link href="/ajout-dr" className="btn-primary h-11 w-11 !p-0 sm:h-auto sm:w-auto sm:px-3 sm:py-1.5">
-          <IconPlus className="h-4 w-4" />
-          <span className="hidden sm:inline">Ajout DR</span>
-        </Link>
-      </div>
+      <span className="hidden items-center gap-2 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-500 ring-1 ring-slate-200 md:inline-flex">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        {today}
+      </span>
     </header>
   );
 }
