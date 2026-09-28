@@ -34,11 +34,10 @@ export default function Sheet1Page() {
   const [dateFilter, setDateFilter] = useState('');
   const [search, setSearch] = useState('');
 
-  const handleSynchronize = () => {
+  const handleSynchronize = async () => {
     const store = useInvoiceStore.getState();
-    store.invoices
-      .filter((inv) => inv.status === 'SHEET1')
-      .forEach((inv) => store.transferInvoice(inv.id, 'ALERTE'));
+    const ids = store.invoices.filter((inv) => inv.status === 'SHEET1').map((inv) => inv.id);
+    await store.transferMany(ids, 'ALERTE');
     router.push('/alerte');
   };
 

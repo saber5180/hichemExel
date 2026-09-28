@@ -10,6 +10,13 @@ import { useInvoiceStore } from '@/lib/store';
 export default function AppChrome({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const total = useInvoiceStore((state) => state.invoices.length);
+  const persistError = useInvoiceStore((state) => state.persistError);
+  const hydrate = useInvoiceStore((state) => state.hydrate);
+  const hydrated = useInvoiceStore((state) => state.hydrated);
+
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -61,6 +68,15 @@ export default function AppChrome({ children }: { children: React.ReactNode }) {
       <div className="lg:pl-[17rem]">
         <Topbar onOpenMenu={() => setMenuOpen(true)} />
         <main className="mx-auto w-full max-w-[1400px] px-4 py-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:px-5 sm:py-7 lg:px-8 lg:py-9">
+          {!hydrated && (
+            <p className="mb-4 text-sm text-slate-500">Chargement des factures depuis Neon…</p>
+          )}
+          {persistError && (
+            <div className="mb-5 rounded-2xl border border-rose-100 bg-rose-50/80 px-4 py-3 text-sm text-rose-800">
+              Les factures n&apos;ont pas pu être enregistrées dans Neon : {persistError}.
+              Vérifiez la variable <strong>DATABASE_URL</strong> sur Vercel.
+            </div>
+          )}
           <div className="animate-fade-in-up">{children}</div>
         </main>
       </div>

@@ -35,7 +35,7 @@ export default function UploadPage() {
 
     try {
       const invoices = await readExcelFile(file);
-      importInvoices(invoices);
+      await importInvoices(invoices);
       router.push('/sheet1');
     } catch (err) {
       setError('Erreur lors de la lecture du fichier : ' + (err as Error).message);
@@ -92,7 +92,7 @@ export default function UploadPage() {
           </div>
 
           <p className="mt-4 text-sm font-semibold text-slate-900">
-            {uploading ? 'Lecture du fichier en cours…' : 'Glissez-déposez votre fichier ici'}
+            {uploading ? 'Enregistrement dans Neon…' : 'Glissez-déposez votre fichier ici'}
           </p>
           <p className="mt-1 text-xs text-slate-500">Formats acceptés : .xlsx, .xlsm, .xls</p>
 
